@@ -1,0 +1,28 @@
+{
+  "name": "ecommerce-coderhouse",
+  "version": "1.0.0",
+  "description": "Proyecto final del curso de backend de Coderhouse",
+  "main": "index.js",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.4",
+    "fs": "0.0.1-security",
+    "nodemon": "^2.0.13",
+    "socket.io": "^4.2.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"nodemon server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/escu-git/Ecommerce-Coderhouse.git"
+  },
+  "author": "Escudero Pablo Martin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/escu-git/Ecommerce-Coderhouse/issues"
+  },
+  "homepage": "https://github.com/escu-git/Ecommerce-Coderhouse#readme"
+}
