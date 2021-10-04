@@ -1,0 +1,43 @@
+[
+    {
+        "id":"1",
+        "userName":"John Doe",
+        "productos":[
+            {
+            "id":1,
+            "name":"Cactus",
+            "description":"Cuadrito desértico",
+            "image":"https://firebasestorage.googleapis.com/v0/b/deco-etcetera.appspot.com/o/cuadro2.jpg?alt=media&token=05211aa9-1d31-461e-9755-3984def842a9",
+            "price":250,
+            "stock":10,
+            "timestamp":"03/10/2021"
+            }
+        ],
+        "totalPrice":700
+    },
+    {
+        "id":"2",
+        "userName":"John Doe",
+        "productos":[
+            {
+        "id":1,
+        "name":"Cactus",
+        "description":"Cuadrito desértico",
+        "image":"https://firebasestorage.googleapis.com/v0/b/deco-etcetera.appspot.com/o/cuadro2.jpg?alt=media&token=05211aa9-1d31-461e-9755-3984def842a9",
+        "price":250,
+        "stock":10,
+        "timestamp":"03/10/2021"
+    },
+    {
+        "id":2,
+        "name":"Intense cat",
+        "description":"Some people thought that he was too intense",
+        "image":"https://firebasestorage.googleapis.com/v0/b/deco-etcetera.appspot.com/o/cuadro9.jpg?alt=media&token=45ca2bc7-d7d0-48c4-8695-ded7e54896b9",
+        "price":300,
+        "stock":12
+        "timestamp":"02/10/2021"
+    }
+        ],
+        "totalPrice":400
+    }
+];
