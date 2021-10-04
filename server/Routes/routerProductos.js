@@ -1,9 +1,9 @@
 const express = require('express');
+const products = require('../middlewares/producto.js');
+const validate = require('../middlewares/userValidation.js');
 const routerProductos = express.Router();
 
-routerProductos.get('/listar/:id?', (req, res)=>{
-
-});
+routerProductos.get('/listar', validate.isAdmin(), products.list());
 
 routerProductos.post('/agregar', (req, res)=>{
 
@@ -21,4 +21,4 @@ routerProductos.delete('/actualizar/:id?', (req, res)=>{
     
 });
 
-module.exports = {routerProductos};
+module.exports = routerProductos;

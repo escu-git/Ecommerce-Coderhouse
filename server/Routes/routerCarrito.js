@@ -8,4 +8,4 @@ routerCarrito.post('/agregar/:id',)
 routerCarrito.delete('/delete/:id',)
 
 
-module.exports = {routerCarrito};
+module.exports = routerCarrito;
