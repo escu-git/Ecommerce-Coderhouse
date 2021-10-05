@@ -1,4 +1,3 @@
-const { request } = require('express');
 const {Product, File} = require('../helpers/classes.js');
 const {requestDB} = require('../helpers/functions.js');
 const PRODUCTOS_FILE = 'productos.txt';

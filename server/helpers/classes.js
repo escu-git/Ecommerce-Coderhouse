@@ -42,4 +42,18 @@ class File{
     };
 }
 
+class Carrito{
+    constructor(userName, products){
+        this.userName = userName,
+        this.products = products
+    }
+    setTimeStamp(lastId){
+        this.id=lastId+1;
+    }
+    calcTotalPrice(products){
+        let prices = products.map(x=>x.price);
+        let totalPrice = prices.reduce((a,b)=>a+b);
+        this.totalPrice = totalPrice;
+    }
+}
 module.exports={Product, File}
