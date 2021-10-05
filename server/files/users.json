@@ -1,0 +1,12 @@
+[
+    {
+        "id":1,
+        "userName":"Pablo Escudero",
+        "isAdmin":true
+    },
+    {
+        "id":2,
+        "userName":"John Doe",
+        "isAdmin":false
+    }
+]
