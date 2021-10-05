@@ -1,12 +1,14 @@
 const express = require('express');
-const validate = require('../middlewares/userValidation.js');
+const carrito = require('../controllers/carrito');
 const routerCarrito = express.Router();
 
-routerCarrito.get('/listar/:id?',  )
+routerCarrito.get('/listar/:id?', carrito.list )
 
-routerCarrito.post('/agregar/:id', )
+routerCarrito.post('/agregar/:id', carrito.addProduct)
 
-routerCarrito.delete('/delete/:id',)
+routerCarrito.delete('/eliminar/:id', carrito.delete)
+
+routerCarrito.post('/adquirir', carrito.adquire);
 
 
 module.exports = routerCarrito;

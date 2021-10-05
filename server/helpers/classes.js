@@ -47,7 +47,7 @@ class Carrito{
         this.userName = userName,
         this.products = products
     }
-    setTimeStamp(lastId){
+    setId(lastId){
         this.id=lastId+1;
     }
     calcTotalPrice(products){
@@ -55,5 +55,9 @@ class Carrito{
         let totalPrice = prices.reduce((a,b)=>a+b);
         this.totalPrice = totalPrice;
     }
+    setTimeStamp(){
+        let now = new Date().toLocaleDateString("es-ES");
+        this.timeStamp = now;
+    }
 }
-module.exports={Product, File}
+module.exports={Product, File, Carrito}
