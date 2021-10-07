@@ -3,7 +3,7 @@ const products = require('../controllers/producto.js');
 const validate = require('../middlewares/userValidation.js');
 const routerProductos = express.Router();
 
-routerProductos.get('/listar/:id?', products.list);
+routerProductos.get('/listar/:id?', validate.loggedUser, products.list);
 
 routerProductos.post('/agregar', validate.isAdmin, products.save);
 

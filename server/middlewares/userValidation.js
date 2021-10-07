@@ -1,8 +1,10 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+
 const validate ={
     isAdmin: async(req, res, next)=>{
-        console.log('Is admin✔')
+        let mockAdminRole = true;
+        mockAdminRole ==true ? console.log('Is admin✔') : res.status(403).json({message:'Acceso denegado'})
         next()
     //     try{
     //         const bearerHeader = req.headers['authorization'];
@@ -23,6 +25,12 @@ const validate ={
     //     }catch(err){
     //         res.status(403).json({message:err})
     //     }
+    },
+    
+    loggedUser: (req, res, next)=>{
+        const mockedLoggedUser = true;
+        mockedLoggedUser == true ? console.log('Registered user Logged in ✔') : res.status(401).json({message:'Por favor, loguee/registre su usuario para avanzar'})
+        next()
     }
 }
 

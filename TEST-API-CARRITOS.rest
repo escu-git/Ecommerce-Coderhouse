@@ -1,0 +1,35 @@
+
+//LISTAR:
+GET http://localhost:8080/api/carrito/listar HTTP/1.1
+Content-Type: application/json
+    //Listar todos los Carritos
+###
+
+GET http://localhost:8080/api/carrito/listar/2 HTTP/1.1
+Content-Type: application/json
+    //Listar un carrito en especial (modificar idParam)
+###
+
+//AGREGAR PRODUCTOS:
+POST http://localhost:8080/api/carrito/agregar/1 HTTP/1.1
+Content-Type: application/json
+    //Añadir producto al carrito --> Modificar el idParam con el id del producto que se desee añadir.
+    //El carrito se guardará en memoria, podrán eliminarse y agregar productos hasta que se adquiera en la ruta:
+    // http://localhost:8080/api/carrito/adquirir
+###
+
+DELETE http://localhost:8080/api/carrito/eliminar/3 HTTP/1.1
+Content-Type: application/json
+    //Eliminar producto (Modificar idParam en ruta)
+
+###
+
+POST http://localhost:8080/api/carrito/adquirir HTTP/1.1
+Content-Type: application/json
+    //Adquirir producto --> Indicar nombre de usuario.
+
+    {
+    "userName":"Cami Álvarez"
+    }
+
+###
