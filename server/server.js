@@ -1,9 +1,11 @@
 const express = require('express');
+const {setDatabase} = require('../Database/database.js');
 const routerProductos = require('./Routes/routerProductos.js');
 const routerCarrito = require('./Routes/routerCarrito');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+setDatabase();
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static('public'));

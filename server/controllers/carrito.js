@@ -1,6 +1,5 @@
 const {requestDB} = require('../helpers/functions.js');
 const {Carrito, File} = require('../helpers/classes.js');
-const { search } = require('../Routes/routerProductos.js');
 const CARRITOS_FILE = 'carritos.txt';
 const PRODUCTOS_FILE = 'productos.txt';
 let tempCarrito = [];

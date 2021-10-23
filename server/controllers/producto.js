@@ -1,25 +1,32 @@
 const {Product, File} = require('../helpers/classes.js');
+const {dbQuery} = require('../helpers/functions.js');
 const {requestDB} = require('../helpers/functions.js');
 const PRODUCTOS_FILE = 'productos.txt';
+const dbSettings = require('../../Database/db_config');
+const {mariaDB} = dbSettings;
+const db = require('knex')(mariaDB);
+const PRODUCTS = "products";
+const USERS = "users";
 
 const products ={
     list: async(req, res)=>{
         const{id}=req.params
         //Consulto la 'base de datos en el .txt:
-        let productList = await requestDB(PRODUCTOS_FILE);
+        const allProducts = await dbQuery.getAllData(db, PRODUCTS)
+        .then(rows=>rows);
+        console.log(allProducts);
+        // //Check de que el array de productos no está vacío:
+        // if(knex.from('products').select("*")<1){
+        //     res.status(404).json({message:'No hay productos en la base de datos'})
+        // }else if(id){
+        //     //Busqueda del producto en el array de productos:
+        //     let requestedProduct = knex.select(id).from('products')
 
-        //Check de que el array de productos no está vacío:
-        if(productList<1){
-            res.status(404).json({message:'No hay productos en la base de datos'})
-        }else if(id){
-            //Busqueda del producto en el array de productos:
-            let requestedProduct = productList.find(x=>x.id==id);
-
-            //Response por la existencia o no existencia del producto:
-            requestedProduct? res.status(200).json({message:`El producto ${id} fue encontrado exitosamente`,data:requestedProduct}) : res.status(404).json({message:'El producto solicitado no existe'});         
-        }else{
-            res.status(200).json({data:productList})
-        }
+        //     //Response por la existencia o no existencia del producto:
+        //     requestedProduct? res.status(200).json({message:`El producto ${id} fue encontrado exitosamente`,data:requestedProduct}) : res.status(404).json({message:'El producto solicitado no existe'});         
+        // }else{
+        //     res.status(200).json({data:knex.from('products').select("*")})
+        // }
     },
 
     save: async(req, res)=>{
@@ -54,12 +61,18 @@ const products ={
         try{
             let productList = await requestDB(PRODUCTOS_FILE);
             let requestedProduct = productList.findIndex(x=>x.id == id);
-
+            
             let updatedProduct = productList[requestedProduct];
             
-            updatedProduct= {id:updatedProduct.id, timeStamp:updatedProduct.timeStamp, name:name, description:description, image:image, price:price, stock:stock}
             
-
+            updatedProduct= {id:updatedProduct.id,
+                timeStamp:updatedProduct.timeStamp,
+                name:name, description:description,
+                image:image,
+                price:price,
+                stock:stock
+            }
+            
             let result = productList.splice(requestedProduct, 1, updatedProduct);
             console.log(result)
             console.log(productList)

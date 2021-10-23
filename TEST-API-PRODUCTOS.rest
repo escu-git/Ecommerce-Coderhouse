@@ -5,7 +5,7 @@ Content-Type: application/json
     //Listar todos los productos.
 ###
 
-GET http://localhost:8080/api/productos/listar/2 HTTP/1.1
+GET http://localhost:8080/api/productos/listar/1| HTTP/1.1
 Content-Type: application/json
     //Listar un producto en especial (modificar idParam)
 ###
@@ -28,11 +28,7 @@ PUT http://localhost:8080/api/productos/actualizar/1 HTTP/1.1
 Content-Type: application/json
     //Modificar producto (Cambiar valor en alguno de los campos debajo, y seleccionar producto en idParam)
 {
-        "name":"Cambio de nombre",
-        "description":"Descripcion de cactus",
-        "image":"https://firebasestorage.googleapis.com/v0/b/deco-etcetera.appspot.com/o/cuadro2.jpg?alt=media&token=05211aa9-1d31-461e-9755-3984def842a9",
-        "price":250,
-        "stock":30
+        "name":"Juani"
     }
 ###
 

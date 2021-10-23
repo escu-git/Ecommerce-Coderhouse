@@ -1,5 +1,4 @@
-
-const {File} = require('../helpers/classes.js');
+const {File} = require('./classes.js');
 
 const requestDB = async(db) =>{
     try{
@@ -11,4 +10,20 @@ const requestDB = async(db) =>{
     }
 }
 
-module.exports = {requestDB}
+const dbQuery = {
+    getAllData : async(db, table)=>{
+        return db
+        .select("*")
+        .from(table)
+        .then(rows=>rows)
+    },
+    getSpecificById: async(db, table, requestedId)=>{
+        return db
+        .select("*")
+        .from(table)
+        .where("id", requestedId)
+        .first();
+    }
+}
+
+module.exports = {requestDB, dbQuery}
