@@ -1,7 +1,13 @@
-Consultas:
-¿Cual es mejor práctica para setear express.Router()?
-    -Exportar express desde server.js e importarlo en los routers.
-    -Crear una nueva instancia de express en cada router.
+Consignas del desafío:
+-Agregar 7 tipos de persistencia de datos:
+1) File system.
+2) Mysql/mariaDB
+3) Mysql/mariaDB DBaaS
+4) SQLite3
+5) MongoDB
+6) MongoDB DBaaS
+7) Firebase
 
-Estructura general del proyecto:
-Si bien no hay una forma única de acomodar las carpetas/archivos, ¿El orden está ok/cumple con buenas prácticas?
+Implementar CRUD en cada ruta.
+
+Consultas:
