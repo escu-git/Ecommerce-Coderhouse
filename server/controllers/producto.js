@@ -12,7 +12,7 @@ const products ={
         const{id}=req.params;
         const attr ={
             method:req.method,
-            url:req.url
+            url:req.baseUrl
         }
         //AL MANAGER DE DATABASES:
         const result = await dbManager(attr, id);
@@ -23,26 +23,19 @@ const products ={
     save: async(req, res)=>{
         try{
             const{name, description, image, price, stock} = req.body;
-
+            const attr = {
+                method:req.method,
+                url:req.baseUrl
+            }
             //Check de que no faltan datos:
-            (!name, !description, !image, !price, !stock) && res.status(400).json({message:'Faltan datos para guardar correctamente el producto'})
+            // (!name, !description, !image, !price, !stock) && res.status(400).json({message:'Faltan datos para guardar correctamente el producto'})
 
-            //Consulto la 'base de datos' en el .txt
-            let productList = await requestDB(PRODUCTOS_FILE);
+            const newProduct = await dbManager(attr, req.body)
 
-            //Nuevo producto y asignación de id/fecha:
-            let newProduct = new Product(name, description, image, price, stock);
-            newProduct.setId(productList.length)
-            newProduct.setTimeStamp()
-
-            //Push a array de productos y sobre-escritura de .txt
-            productList.push(newProduct)
-            let productFile = new File(PRODUCTOS_FILE);
-            productFile.writeFile(productList)
-
-            res.status(201).json({message:`Nuevo producto cargado`, data:newProduct});
+            res.status(201).json({message:`Nuevo producto cargado`, data: newProduct});
         }catch(err){
             res.status(400).json({message:`Error cargando producto:${err}`})
+            console.log(err)
         }
     },
 

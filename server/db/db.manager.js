@@ -1,15 +1,15 @@
 const fsManager = require('../../Database/fs/fs.queries')
 const firebaseManager = require('../../Database/firebase/firebase.queries')
 const mongoManager = require('../../Database/mongodb/mongo.queries')
+const sqlManager = require('../../Database/sql/mysql.queries')
 
-//Traer todos los datos
-async function dbManager(attr, requestedId){
+async function dbManager(attr, obj){
     switch(process.env.DB_SELECTION){
         case '0'://Memoria
             console.log('Memoria')
             break
         case '1' ://File system
-            return fsManager(attr, requestedId)
+            return fsManager(attr, obj)
         case '2'://Mysql
             console.log('2222')
             break
