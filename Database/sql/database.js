@@ -1,4 +1,4 @@
-const dbSettings = require('../Database/db_config');
+const dbSettings = require('./db_config');
 const {mariaDB, sqLite3} = dbSettings;
 const db = require('knex');
 
@@ -73,19 +73,25 @@ const usersDB = async()=>{
 
 const setDatabase = () =>{
     //Chequeamos que las base de datos no existan, para evitar warnings de knex:
-    db(mariaDB).schema.hasTable('products').then(exists =>{
-        if(!exists){
-            productsDB();
-        }else{
-            console.log('Products table already exists ✔');
-        }
-    });
-    db(mariaDB).schema.hasTable('users').then(exists=>{
-        if(!exists){
-            usersDB();
-        }else{
-            console.log('Users table already exists ✔')
-        }
-    })
+    try{
+        db(mariaDB).schema.hasTable('products').then(exists =>{
+            if(!exists){
+                productsDB();
+            }else{
+                console.log('Products table already exists ✔');
+            }
+        });
+        db(mariaDB).schema.hasTable('users').then(exists=>{
+            if(!exists){
+                usersDB();
+            }else{
+                console.log('Users table already exists ✔')
+            }
+        })
+        return 'Ok setDatabase'
+    }catch(err){
+        console.log(err);
+        return err
+    }
 }
 module.exports = {setDatabase};

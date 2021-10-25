@@ -7,21 +7,9 @@ let tempCarrito = [];
 const carrito = {
     list: async(req, res)=>{
         const{id}=req.params
-        //Consulto la 'base de datos en el .txt:
-        let carritoList = await requestDB(CARRITOS_FILE);
-
-        //Check de que el array de productos no está vacío:
-        if(carritoList<1){
-            res.status(404).json({message:'No hay carritos en la base de datos'})
-        }else if(id){
-            //Busqueda del producto en el array de productos:
-            let requestedProduct = carritoList.find(x=>x.id==id);
-
-            //Response por la existencia o no existencia del producto:
-            requestedProduct? res.status(200).json({message:`El carrito ${id} fue encontrado exitosamente`,data:requestedProduct}) : res.status(404).json({message:'El carrito solicitado no existe'});         
-        }else{
-            res.status(200).json({data:carritoList})
-        }
+        const baseUrl = req.baseUrl;
+        const result = await list(baseUrl, id);
+        res.status(200).json({message:`Query exitosa`, data:result})
     },
 
     addProduct: async(req, res)=>{

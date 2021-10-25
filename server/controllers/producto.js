@@ -1,32 +1,23 @@
 const {Product, File} = require('../helpers/classes.js');
-const {dbQuery} = require('../helpers/functions.js');
 const {requestDB} = require('../helpers/functions.js');
 const PRODUCTOS_FILE = 'productos.txt';
-const dbSettings = require('../../Database/db_config');
+const dbSettings = require('../../Database/sql/db_config');
+const dbManager = require('../db/db.manager.js');
 const {mariaDB} = dbSettings;
 const db = require('knex')(mariaDB);
 const PRODUCTS = "products";
-const USERS = "users";
 
 const products ={
     list: async(req, res)=>{
-        const{id}=req.params
-        //Consulto la 'base de datos en el .txt:
-        const allProducts = await dbQuery.getAllData(db, PRODUCTS)
-        .then(rows=>rows);
-        console.log(allProducts);
-        // //Check de que el array de productos no está vacío:
-        // if(knex.from('products').select("*")<1){
-        //     res.status(404).json({message:'No hay productos en la base de datos'})
-        // }else if(id){
-        //     //Busqueda del producto en el array de productos:
-        //     let requestedProduct = knex.select(id).from('products')
-
-        //     //Response por la existencia o no existencia del producto:
-        //     requestedProduct? res.status(200).json({message:`El producto ${id} fue encontrado exitosamente`,data:requestedProduct}) : res.status(404).json({message:'El producto solicitado no existe'});         
-        // }else{
-        //     res.status(200).json({data:knex.from('products').select("*")})
-        // }
+        const{id}=req.params;
+        const attr ={
+            method:req.method,
+            url:req.url
+        }
+        //AL MANAGER DE DATABASES:
+        const result = await dbManager(attr, id);
+        
+        res.status(200).json({message:`Query exitosa`, data:result})
     },
 
     save: async(req, res)=>{

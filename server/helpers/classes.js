@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = './Database/fs/'
 
 class Product{
     constructor(name, description, image, price, stock){
@@ -24,7 +25,7 @@ class File{
 
     async writeFile(prod){
         try{
-            let file = `server/files/${this.file}`
+            let file = `${path}${this.file}`
             fs.writeFileSync(file, JSON.stringify(prod))
         }catch(err){
             console.log(err)
@@ -33,7 +34,7 @@ class File{
 
      async readFile(){
         try{
-            let fileData = await fs.readFileSync(`server/files/${this.file}`, 'utf-8')
+            let fileData = await fs.readFileSync(`${path}${this.file}`, 'utf-8')
             let result = JSON.parse(fileData);
             return result
         }catch(err){
