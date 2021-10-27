@@ -17,14 +17,13 @@ async function dbManager(attr, obj){
             console.log('333')
             break
         case '5'://MongoDB
-            console.log('333')
+            mongoManager(attr);
             break
         case '6'://MongoDBaaS
             console.log('333')
             break
         case '7'://Firebase
-            console.log('333')
-            break
+            return firebaseManager(attr)
     }
 }
 

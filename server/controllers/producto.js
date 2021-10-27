@@ -1,11 +1,4 @@
-const {Product, File} = require('../helpers/classes.js');
-const {requestDB} = require('../helpers/functions.js');
-const PRODUCTOS_FILE = 'productos.txt';
-const dbSettings = require('../../Database/sql/db_config');
 const dbManager = require('../db/db.manager.js');
-const {mariaDB} = dbSettings;
-const db = require('knex')(mariaDB);
-const PRODUCTS = "products";
 
 const products ={
     list: async(req, res)=>{
@@ -27,9 +20,6 @@ const products ={
                 method:req.method,
                 url:req.baseUrl
             }
-            //Check de que no faltan datos:
-            // (!name, !description, !image, !price, !stock) && res.status(400).json({message:'Faltan datos para guardar correctamente el producto'})
-
             const newProduct = await dbManager(attr, req.body)
 
             res.status(201).json({message:`Nuevo producto cargado`, data: newProduct});
@@ -41,30 +31,18 @@ const products ={
 
     update:async(req, res)=>{
         const{id}=req.params;
-        const{name, description, image, price, stock} = req.body;
+        const attr ={
+            method:req.method,
+            url:req.baseUrl,
+            props:req.body
+        }
         try{
-            let productList = await requestDB(PRODUCTOS_FILE);
-            let requestedProduct = productList.findIndex(x=>x.id == id);
-            
-            let updatedProduct = productList[requestedProduct];
-            
-            
-            updatedProduct= {id:updatedProduct.id,
-                timeStamp:updatedProduct.timeStamp,
-                name:name, description:description,
-                image:image,
-                price:price,
-                stock:stock
-            }
-            
-            let result = productList.splice(requestedProduct, 1, updatedProduct);
-            console.log(result)
-            console.log(productList)
+            let response = await dbManager(attr, id)
 
-            let productFile = new File(PRODUCTOS_FILE)
-            productFile.writeFile(productList);
-    
-            res.status(200).json({message:`Producto ${id} fue modificado correctamente`, data:updatedProduct})
+            response.success ?
+            res.status(200).json({response})
+            :
+            res.status(400).json({response})
         }catch(err){
             res.status(400).json({message:'Ocurrió un error', error:err})
         }
@@ -72,18 +50,16 @@ const products ={
 
     erase: async(req, res)=>{
         const {id} = req.params;
+        const attr = {
+            method:req.method,
+            url: req.baseUrl
+        }
         try{
-            let productList = await requestDB(PRODUCTOS_FILE);
-            let requestedProduct = productList.findIndex(x=>x.id == id);
-            if(requestedProduct){
-                let deletedProduct = productList.splice(requestedProduct,1);
-                let productFile = new File(PRODUCTOS_FILE)
-                productFile.writeFile(productList);
-        
-                res.status(200).json({message:`Producto ${id} fue eliminado permanentemente`, data:deletedProduct})
-            }else{
-                res.status(400).json({message:'Ocurrió un error'})
-            }
+           let response = await dbManager(attr, id);
+           response.success ?
+           res.status(200).json({message: response.message, data:response.data})
+           :
+            res.status(400).json({message: response.message})
         }catch(err){
             console.log(err)
         }

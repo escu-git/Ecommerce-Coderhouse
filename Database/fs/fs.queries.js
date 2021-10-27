@@ -7,6 +7,10 @@ async function fsManager(attr, obj){
             return fsQueries.list(attr.url, obj)
         case 'POST':
             return fsQueries.create(attr.url, obj)
+        case 'DELETE':
+            return fsQueries.remove(attr.url, obj)
+        case 'PUT':
+            return fsQueries.update(attr, obj)
     }
 }
 
@@ -51,6 +55,59 @@ const fsQueries ={
         }catch(err){
             console.log(err)
         }
+    },
+    remove: async(url, id)=>{
+        let file = url.includes('productos')? 'productos.txt': 'carritos.txt';
+        let productList = await requestDB(file);
+        let requestedProduct = productList.findIndex(x=>x.id == id);
+        if(requestedProduct >= 0){
+            let deletedProduct = productList.splice(requestedProduct,1);
+            let productFile = await new File(file)
+            await productFile.writeFile(productList);
+            return {
+                message:`Id ${id} fue eliminado`,
+                data: deletedProduct, 
+                success: true
+            }
+        }else{
+            return {
+                message:`Id ${id} no fue encontrado`, 
+                success:false
+            }
+        }
+    },
+    update: async(attr, id)=>{
+        const{name, description, image, price, stock} = attr.props;
+            let file = attr.url.includes('productos')? 'productos.txt': 'carritos.txt';
+            let productList = await requestDB(file);
+            let requestedProduct = productList.findIndex(x=>x.id == id);
+            if(requestedProduct >=0){
+                let updatedProduct = productList[requestedProduct];
+                updatedProduct= {
+                    id:updatedProduct.id,
+                    timeStamp:updatedProduct.timeStamp,
+                    name:name, description:description,
+                    image:image,
+                    price:price,
+                    stock:stock
+                }
+                
+                let result = productList.splice(requestedProduct, 1, updatedProduct);
+                console.log(result)
+    
+                let productFile = await new File(file)
+                await productFile.writeFile(productList);
+                return {
+                    message:`Producto ${id} fue modificado correctamente`, 
+                    data:updatedProduct,
+                    success:true
+                }
+            }else{
+                return {
+                    message:`Producto ${id} no fue encontrado`,
+                    success:false
+                }
+            }
     }
 }
 
