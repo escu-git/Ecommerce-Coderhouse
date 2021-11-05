@@ -7,7 +7,7 @@ const dbSettings = {
             port:3306,
             user:'root',
             password:'',
-            database:'ecommerce_coderhouse'
+            database:'entregafinal-2'
         }
     },
     sqLite3:{

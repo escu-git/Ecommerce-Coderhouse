@@ -1,31 +1,25 @@
 const fsManager = require('../../Database/fs/fs.queries')
 const firebaseManager = require('../../Database/firebase/firebase.queries')
 const mongoManager = require('../../Database/mongodb/mongo.queries')
-const sqlManager = require('../../Database/sql/mysql.queries')
+const sqlManager = require('../../Database/sql/sql.queries.js');
+const sqLite3Manager = require('../../Database/sqlite3/sqlite3.queries');
+const memoryManager = require('./memory');
 
 async function dbManager(attr, obj){
     switch(process.env.DB_SELECTION){
         case '0'://Memoria
-            console.log('Memoria')
-            break
+            return memoryManager(attr, obj)
         case '1' ://File system
             return fsManager(attr, obj)
         case '2'://Mysql
-            console.log('2222')
-            break
+            return sqlManager(attr, obj)
         case '4'://Sqlite3
-            console.log('333')
-            break
+            return sqLite3Manager(attr)
         case '5'://MongoDB
-            mongoManager(attr);
-            break
-        case '6'://MongoDBaaS
-            console.log('333')
-            break
+            return mongoManager(attr);
         case '7'://Firebase
             return firebaseManager(attr)
     }
 }
-
 
 module.exports = dbManager;

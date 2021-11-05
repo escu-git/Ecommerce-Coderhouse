@@ -45,7 +45,7 @@ class File{
 
 class Carrito{
     constructor(userName, products){
-        this.userName = userName,
+        this.userName = userName
         this.products = products
     }
     setId(lastId){

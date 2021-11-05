@@ -30,7 +30,7 @@ const INITIAL_USERS = [
 ]
 
 const setInitial = async()=>{
-    await db(mariaDB)('products').insert(INITIAL_PRODUCTS)
+    await db(mariaDB)('productos').insert(INITIAL_PRODUCTS)
     db(mariaDB)('users').insert(INITIAL_USERS)
     .then(x=>{
         console.log(x)
@@ -41,7 +41,7 @@ const setInitial = async()=>{
 }
 
 const productsDB = async() =>{
-    db(mariaDB).schema.createTable('products', table=>{
+    db(mariaDB).schema.createTable('productos', table=>{
         table.increments('id'),
         table.string('name'),
         table.integer('price'),
@@ -57,6 +57,21 @@ const productsDB = async() =>{
     .catch(err=>{console.error(`Products DB message:`)
     console.log(err)})
 };
+
+const carritosDB = async()=>{
+    db(mariaDB).schema.createTable('carritos', table=>{
+        table.increments('id'),
+        table.string('user'),
+        table.integer('totalPrice'),
+        table.string('timeStamp')
+    })
+    .then(x=>{
+        console.log('La tabla carritos fue creada correctamente ✔');
+    })
+    .then(x=>setInitial())
+    .catch(err=>{console.error(`Products DB message:`)
+    console.log(err)})
+}
 
 const usersDB = async()=>{
     db(mariaDB).schema.createTable('users', user=>{
@@ -74,7 +89,7 @@ const usersDB = async()=>{
 const setDatabase = () =>{
     //Chequeamos que las base de datos no existan, para evitar warnings de knex:
     try{
-        db(mariaDB).schema.hasTable('products').then(exists =>{
+        db(mariaDB).schema.hasTable('productos').then(exists =>{
             if(!exists){
                 productsDB();
             }else{
@@ -87,6 +102,13 @@ const setDatabase = () =>{
             }else{
                 console.log('Users table already exists ✔')
             }
+        db(mariaDB).schema.hasTable('carritos').then(exists=>{
+            if(!exists){
+                carritosDB()
+            }else{
+                console.log('La tabla carritos ya existe ✔')
+            }
+        })
         })
         return 'Ok setDatabase'
     }catch(err){

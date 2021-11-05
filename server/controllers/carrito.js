@@ -1,34 +1,48 @@
 const {requestDB} = require('../helpers/functions.js');
 const {Carrito, File} = require('../helpers/classes.js');
+const dbManager = require('../db/db.manager.js');
 const CARRITOS_FILE = 'carritos.txt';
-const PRODUCTOS_FILE = 'productos.txt';
 let tempCarrito = [];
 
 const carrito = {
     list: async(req, res)=>{
         const{id}=req.params
-        const baseUrl = req.baseUrl;
-        const result = await list(baseUrl, id);
-        res.status(200).json({message:`Query exitosa`, data:result})
+        const attr = {
+            method: req.method,
+            url:req.baseUrl,
+        }
+        try{
+            console.log('entro')
+            const result = await dbManager(attr, id);
+            res.status(200).json({message:`Query exitosa`, data:result})
+        }catch(err){
+            res.json({message:'Ocurrió un error', err:err})
+        }
     },
-
     addProduct: async(req, res)=>{
         try{
-            const{id} = req.params;
+            const{id} = req.params
+            console.log(id)
             let checkProduct = tempCarrito.find(x=>x.id == id);
-            console.log(checkProduct)
+            const attr={
+                method:'GET',
+                url:'productos'
+            }
             if(checkProduct !== undefined){
                 res.status(400).json({message:`El producto: ${id} ya existe en su carrito.`})
             }else{
                 //Check de que no faltan datos:
                 (!id) && res.status(400).json({message:'Faltan datos para guardar correctamente el producto en el carrito'})
-    
-                let productList = await requestDB(PRODUCTOS_FILE);
-                productToAdd = productList.find(x=>x.id == id);
-                productToAdd ==null && res.status(400).json({message:'El producto a agregar no existe'});
-                
-                tempCarrito.push(productToAdd)
-                res.status(201).json({message:`Nuevo producto cargado al carrito`, data:productToAdd, carrito:tempCarrito});
+
+                let result = await dbManager(attr, id);
+                console.log(result)
+                if(result.success){
+                    tempCarrito.push(result)
+                    console.log(tempCarrito)
+                    res.status(201).json({message:`Nuevo producto cargado al carrito`, data:result, carrito:tempCarrito});
+                }else{
+                    res.status(400).json({message:'El producto a agregar no existe'});
+                }
             }
         }catch(err){
             res.status(400).json({message:`Error cargando producto:${err}`})
@@ -55,24 +69,26 @@ const carrito = {
     },
 
     adquire: async(req, res)=>{
-        const {userName}=req.body;
+        console.log(tempCarrito)
+        const attr = {
+            method:req.method,
+            url:req.baseUrl,
+            data:{
+                body:req.body,
+                products:tempCarrito
+            }
+        }
+        const{userName}=req.body;
         !userName && res.status(400).json({message:'Por favor, loguee para adquirir productos'});
         tempCarrito.length == 0 && res.status(400).json({message:'No posee productos en su carrito'});
-        let carritos = await requestDB(CARRITOS_FILE);
         
-        let nuevoCarrito = new Carrito(userName, tempCarrito);
-        carritos.length == undefined ? nuevoCarrito.setId(0) : nuevoCarrito.setId(carritos.length);
-        nuevoCarrito.setTimeStamp();
-        nuevoCarrito.calcTotalPrice(tempCarrito)
-
-        carritos.push(nuevoCarrito)
-        
-        let carritoFile = new File(CARRITOS_FILE);
-        carritoFile.writeFile(carritos)
-
+        const result = await dbManager(attr)
         tempCarrito=[];
 
-        res.status(200).json({message:`Su carrito fue registrado correctamente con el id: ${nuevoCarrito.id}`, data:nuevoCarrito})
+        result.success?
+        res.status(200).json(result)
+        :
+        res.status(400).json(result)
     }
 }
 

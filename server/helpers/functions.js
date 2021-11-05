@@ -1,4 +1,5 @@
 const {File} = require('./classes.js');
+const db = require('../../Database/firebase/index');
 
 const requestDB = async(db) =>{
     try{
@@ -7,6 +8,20 @@ const requestDB = async(db) =>{
         return result;
     }catch(err){
         console.log(err)
+    }
+}
+const firebase = {
+    request : async(coll)=>{
+        try{
+            const collection = await db.collection(coll).get()
+            collection.forEach(doc=>{
+                console.log(doc.id, '=>', doc.data())
+                return doc.data()
+            })
+            return collection;
+        }catch(err){
+            console.log(err);
+        }
     }
 }
 
@@ -26,4 +41,4 @@ const dbQuery = {
     }
 }
 
-module.exports = {requestDB, dbQuery}
+module.exports = {requestDB, dbQuery, firebase}

@@ -1,4 +1,10 @@
 const {File, Product} = require('../../server/helpers/classes.js');
+const {firebase} = require('../../server/helpers/functions.js');
+const db = require('./index');
+let productsCounter;
+let cartCounter;
+
+
 
 async function firebaseManager(attr, obj){
     switch(attr.method){
@@ -16,8 +22,8 @@ async function firebaseManager(attr, obj){
 const firebaseQueries ={
     list: async(url, id) =>{//Ver spread operator.
         try{
-            const file = url.includes('productos') ? 'productos.txt':'carritos.txt';
-            const result = await requestDB(file)
+            const collect = url.includes('productos') ? 'productos':'carritos';
+            const result = await firebase.request(collect);
             if(id == undefined){
                 return result
             }else{
@@ -30,34 +36,41 @@ const firebaseQueries ={
     },
     create: async(url, obj)=>{
         let file;
-        console.log(obj)
-        try{
-            if(url.includes('productos')){
-                file = 'productos.txt';
-                const{name, description, image, price, stock} = obj;
-                let productList = await requestDB(file);
+        let productosColl =  await db.collection('contadores').get('productos').then(x=>{
+            return x.doc()
+        });
+        let carritosColl = await db.collection('contadores').get('carritos').then(x=>{
+            return x.doc()
+        });
+        productsCounter = productosColl
+        cartCounter = carritosColl.cantidad
+        console.log(productosColl)
 
-                let newProduct = new Product(name, description, image, price, stock);
-                newProduct.setTimeStamp()
-                newProduct.setId(productList.length);
+        // try{
+        //     if(url.includes('productos')){
+        //         coll = 'productos';
+        //         const{name, description, image, price, stock} = obj;
 
-                productList.push(newProduct);
+        //         let newProduct = new Product(name, description, image, price, stock);
+        //         newProduct.setTimeStamp()
+        //         newProduct.setId(productList.length);
 
-                let productFile = await new File(file);
-                await productFile.writeFile(productList)
-                console.log(newProduct)
-                return newProduct
+
+        //         let productFile = await new File(file);
+        //         await productFile.writeFile(productList)
+        //         console.log(newProduct)
+        //         return newProduct
             
-            }else if(url.includes('carrito')){
-                //Agregar crud carrito
-            }
-        }catch(err){
-            console.log(err)
-        }
+        //     }else if(url.includes('carrito')){
+        //         //Agregar crud carrito
+        //     }
+        // }catch(err){
+        //     console.log(err)
+        // }
     },
     remove: async(url, id)=>{
         let file = url.includes('productos')? 'productos.txt': 'carritos.txt';
-        let productList = await requestDB(file);
+        let productList = await requestFirebase(file);
         let requestedProduct = productList.findIndex(x=>x.id == id);
         if(requestedProduct >= 0){
             let deletedProduct = productList.splice(requestedProduct,1);
@@ -78,7 +91,7 @@ const firebaseQueries ={
     update: async(attr, id)=>{
         const{name, description, image, price, stock} = attr.props;
             let file = attr.url.includes('productos')? 'productos.txt': 'carritos.txt';
-            let productList = await requestDB(file);
+            let productList = await requestFirebase(file);
             let requestedProduct = productList.findIndex(x=>x.id == id);
             if(requestedProduct >=0){
                 let updatedProduct = productList[requestedProduct];

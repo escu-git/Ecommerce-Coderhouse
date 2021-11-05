@@ -14,6 +14,6 @@ routerAdmin.post('/db', (req, res)=>{
     }else{
         res.status(400).json({err:`DB ${dbSelection} no disponible`})
     }
-})
+});
 
 module.exports= routerAdmin;
